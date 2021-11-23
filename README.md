@@ -1,6 +1,6 @@
 # Client-side software design
 
-**2021 version** | **Author**: Kevin Pennekamp | front-end architect | [kevtiq.dev](https://kevtiq.dev) | <hello@kevtiq.dev>
+**2021 version** | **Author**: Kevin Pennekamp | front-end architect | [crinkles.io](https://crinkles.io) | <hello@crinkles.io>
 
 This document describes the concepts and guidelines around client-side software design for digital enterprise applications. It shows how what is important to focus on, and how to apply structure. The goals of this document can be deduced to three goals.
 

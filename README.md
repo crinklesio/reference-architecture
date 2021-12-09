@@ -131,11 +131,10 @@ A user interacts with the UI. This interaction invokes an action. A component ca
 
 In modern client-side applications, state management is one key concepts. In general, there are five different types of state present in an application.
 
-- **Local**: state that is used by a single UI component.
-- **Shared**: state that is used by multiple UI components. It can live in a parent component, or on a global level.
-- **Meta**: also known was 'state about state'. A common example is a `loading` state around fetch requests.
-- **Route**: state stored in the current URL of the application (e.g. object IDs or pagination information).
-- **Remote**: a copy of data coming from a server.
+- **UI**: state that is used by a single, or a set of UI components. It is used to control what we can see, how we interact (e.g. input fields) on a detail level. UI state can exist on a global level as well (e.g. dark-mode).
+- **Remote**: state from the server that is cached on the client for quick and easy access for all UI components. The remote state should not deviate from the server.
+- **URL**: information stored in the URL, like object IDs or filter information, that can be used to determine what to render, or what information to retrieve from the cache/server on (initial) rendering of the page.
+- **Meta**: also known as 'state about state'. A common example is a loading state around fetch requests.
 
 ## Project structure example
 

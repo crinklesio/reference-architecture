@@ -20,7 +20,6 @@ Due to this place in a system, the concepts of a client-side application differ 
 - Invoking and handling user events.
 - Interact with the OS (e.g. browser, iOS).
 - State management inside the application.
-- Styling and accessibility.
 
 ## Design principles
 
@@ -50,52 +49,61 @@ The operations can be further separated using [command-query separation (CQS)](h
 
 By splitting commands and queries, a client-side application becomes _reactive_. One component can subscribe to an application store through a query. Another component updates the store through a command, invoking change in the first component.
 
-![](./images/stale-while-revalidate.png)
-
 This pattern allows for the `stale-while-revalidate` caching strategy. When executing a query, the store serves a cached version first. If the cached version is 'invalid', the operation sends a new request. Upon receiving the response, the store updates and broadcasts the changes. Commands touching records in the store, invalidate those records (e.g. [optimistic UI](https://www.smashingmagazine.com/2016/11/true-lies-of-optimistic-user-interfaces/)).
 
 ### Co-location
 
 Even when applying the first two principles, large client-side applications can become unmaintainable. [Co-location](https://kentcdodds.com/blog/colocation) describes that code and data should live close to where it is used. This allows for better developer experience, but above all, better maintainability of applications. The co-location principle is like the idea of [screaming architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html). This describes that the general structure of your architecture should show the purpose of the application.
 
-> VISUALISATION OF FEATURES vs PAGES\
 
-- STYLE GUIDE
+## Proposed project structure 
 
-- Logic co-located with components
-- Groups of features combined in descriptive categories
-- Tests co-located with features
-
-
-
-
-## Domain layer
-
->  Example project structure. 
+Let's look at the proposed project structure for a single-page React application. The explained clean architecture is not directly derivable from this project structure, but it does exist. The proposed directory match the architecture illustrated in the previous section. For clarification, each directory is provided with an indicator which layer they belong to.  
 
 ```
 src/
-├── components/       // generic UI components
-├── config/           // env. configuration
-├── constants/        // global constants
-├── features/         // feature/domain-based modules
-│   ├── activities/
-│   ├── todos/
-│   │   ├── create.action.js
-│   │   ├── create.validation.js
-│   │   ├── CreateModal.jsx
-│   │   ├── create.module.scss
-├── gateway/          // wrapper + middleware around fetch
-├── lib/              // generic utility functions
-├── routes/           // pages + router
-├── stores/           // global state management
-├── styles/           // all your scss code
-└── index.js          // App wrapper + router
+├── components/       // (I) generic UI components
+├── config/           // (I) env. configuration
+├── constants/        // (A) global constants
+├── features/         // (D/A) feature/domain-based modules
+├── gateway/          // (I) wrapper + middleware around fetch
+├── helpers/          // (A) generic utility functions
+├── routes/           // (I) pages + router
+├── stores/           // (I) global state management
+├── styles/           // (I) all your scss code
+└── index.js          // (I) App wrapper + router
 ```
 
-## Application layer
+This project structure cannot be applied within all languages and frameworks. But, the division can be used. Within SvelteKit, you can move almost everything into the predefined `lib` folder.
 
-- HIGHLY dependable on the type of project you are running. SSR-like have a set folder structure, making it impossible to create a single guide-line. 
+## Domain & application layers
+
+On a high level, a user visiting the application will land on a specific route. This can be route in single-page application, a page on a mobile application, or a route of a SSR-framework. Each route combines one or more *features* accessible to the user. Features are the primary way to implement the domain and application layer. Each feature has the ability to use other features, or use several elements from the infrastructure layer. 
+
+![](./images/c4-components.png)
+
+Within a feature, the co-location principle is heavily applied, as shown in the structure example below. Each feature consists of a mix of logic, styling and components. It is possible to divide features even further. In this case, it is possible to create a `todos/create` and `todos/overview` feature. 
+
+```
+src/
+├── features/
+│   ├── activities/
+│   ├── todos/
+│   │   ├── __tests__/
+│   │   ├── update.action.js
+│   │   ├── get.action.js
+│   │   ├── todos.validation.js
+│   │   ├── todos.store.js
+│   │   ├── UpdateModal.jsx
+│   │   ├── OverviewTable.jsx
+│   │   ├── todos.module.scss
+```
+
+A good example of a feature is an 'update' feature, like in the project structure below. For an update feature, we need multiple *actions*. First need to retrieve the todo we want to update. But, we also need an action to send a `POST` request. The below diagram shows how the feature interactions with different other elements in the architecture. 
+
+![](./images/feature-anatomy.png)
+
+In the above diagram you can see how the CQS-principle is applied. It also shows how actions within a feature can interact. After a `POST` request, the action invokes a command both with the store and the `GET` action. One to update the local cache, and the other to invoke a refetch of the remote cache. 
 
 ## Infrastructure layer
 

@@ -5,7 +5,7 @@
 This document describes the concepts and guidelines around client-side software design for digital enterprise applications. It shows how what is important to focus on, and how to apply structure. The goals of this document can be deduced to three goals.
 
 -   **Enable agility**. A good architecture helps you to embrace change from different angles (technology, business, requirements, etc.). This helps you further minimize the cost of change.
--   **Minimize cost of change**. Create testable and maintainable code, and look ahead of what might come. A good architecture and a set of guidelines allows for easier technology decisions and change it along the way.
+-                 **Minimize cost of change**. Create testable and maintainable code, and look ahead of what might come. A good architecture and a set of guidelines allows for easier technology decisions and change it along the way.
 -   **Shared understanding**. Modern client-side libraries do not offer guidelines on structure and organizing code. This requires a shared language of architectural patterns.
 
 ## Context & concepts
@@ -113,13 +113,10 @@ flowchart LR
     USER -->|navigates| R
     R -->|implements| F1
     F1 -.->|uses| F2
-    F1 --->|request| G
-    F1 --->|command| S
-    S -->|query| F1
+    F1 <-->|command/query| S
     G -->|command| S
-    G -.->|data| F1
-    G -->|request| API
-    API -->|response| G
+    G <-->|request/data| F1
+    G <-->|request/response| API
 ```
 
 Within a feature, the co-location principle is heavily applied, as shown in the structure example below. Each feature consists of a mix of logic, styling and components. It is possible to divide features even further. In this case, it is possible to create a `todos/create` and `todos/overview` feature.
@@ -194,15 +191,13 @@ flowchart LR
     S(Store)
     F(Feature)
     A(External API)
-    F -->|request| CO
-    CO -.->|data| F
+    F -->|request/data| CO
     S -->|query| F
     CO -->|command| S
     CO -->|request| M
-    M ----->|request| CL
-    CL -->|request| A
-    A -->|response| CL
-    CL--->|response| CO
+    M -->|request| CL
+    CL <-->|request/response| A
+    CL-->|response| CO
 ```
 
 > **NOTE**: many open-source API clients implement a similar structure (e.g. [Apollo Client](https://www.apollographql.com/client/))

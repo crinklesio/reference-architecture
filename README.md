@@ -164,8 +164,7 @@ flowchart LR
     G(Gateway)
     U -->|user event| A2
     A2 -.->|command| A1
-    A2 -->|request| G
-    G --> |response| A2
+    A2 <-->|request/response| G
     A1 -->|data| U
 ```
 

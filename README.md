@@ -119,7 +119,10 @@ flowchart LR
     G <-->|request/response| API
 ```
 
-Within a feature, the co-location principle is heavily applied, as shown in the structure example below. Each feature consists of a mix of logic, styling and components. It is possible to divide features even further. In this case, it is possible to create a `todos/create` and `todos/overview` feature.
+Within a feature, the co-location principle is heavily applied, as shown in the structure example below. Each feature consists of a mix of logic, styling and components. The structure can be made more fluid to tailor your needs:
+
+- You can divide features into more details (e.g. `todos/create` and `todos/overview`);
+- You can group `todos.actions.js` and `todos.store.js` together when the actions are little (e.g. similar to Redux action creators). 
 
 ```
 src/
@@ -127,9 +130,7 @@ src/
 │   ├── activities/
 │   ├── todos/
 │   │   ├── __tests__/
-│   │   ├── update.action.js
-│   │   ├── get.action.js
-│   │   ├── todos.validation.js
+│   │   ├── todos.actions.js
 │   │   ├── todos.store.js
 │   │   ├── UpdateModal.jsx
 │   │   ├── OverviewTable.jsx

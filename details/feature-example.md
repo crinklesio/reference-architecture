@@ -16,7 +16,7 @@ features/
 │   │   ├── ActivityCreateModal.jsx
 │   ├── actions/
 │   │   ├── create.activity.js
-│   │   ├── getList.activity.js
+│   │   ├── get.activity.js
 │   ├── models/
 │   │   ├── validate.activity.js
 │   │   ├── groupOnUser.activity.js
@@ -24,130 +24,11 @@ features/
 
 **Components**
 
-```jsx
-// ActivityOverview.jsx
-export default function ActivityOverview({ users }) {
-	const [paging, setPaging] = useState({ page: 0, pageSize: 10 });
-	const { activities, refresh } = useGetActivities(paging);
-	const [showCreateModal, setModal] = useState(false);
-
-	return (
-		<div>
-			<h1>Activities</h1>
-			<button onClick={() => setModal(true)}>Create</button>
-			<ActivityTable activities={activities} />
-			<Pagination {...paging} onChange={setPaging} />
-			{showCreateModal && (
-				<ActivityCreateModal
-					onClose={() => setModal(false)}
-					onComplete={refresh}
-				/>
-			)}
-		</div>
-	);
-}
-```
-
-- Responsible to determine if the create modal needs to be shown or not
-- Responsible to hold the actual pagination state (as it is needed for `useGetActivities`)
-- Responsible to hold the list of activities and feed it to the table (incl. updating)
-
-```jsx
-// ActivityCreateModal
-export default function ActivityCreateModal({ onClose, onComplete }) {
-	const [create, isLoading] = useCreateActivity();
-	const [data, setData] = useState({});
-	const [errors, setErrors] = useState();
-
-	function onSubmit() {
-		const [result, errors] = await create(data);
-		if (errors) setErrors();
-		else {
-			onComplete();
-			onClose();
-		}
-	}
-
-	return (...);
-}
-```
-
-- Responsible to hold state of the form
-- Responsible to show validation errors
-- Responsible to make the network call
+- [Activity Overview](../example/components/ActivityOverview.jsx)
+- [Activity Create Modal](../example/components/ActivityCreateModal.jsx)
 
 **Actions**
-Below an example of how a simple “get a single item based on ID” could look like, without the use of any library. In most cases you can use wrappers to make them more maintainable.
+In the below examples, generic hooks (`useQuery` and `useCommand`) are created that bind the pure JavaScript business logic to React. This separation makes business logic cleaner, easier to test, and therefor more maintainable.
 
-In this case, there is a generic `useQuery` wrapper that takes in an `async` function and an object of arguments. This wrapper hooks the outcome of the async function to React. The actual business logic is separated from the UI code, and can be tested as such.
-
-```js
-// Generic (simple) useQuery function
-function useQuery(query, args) {
-	const [results, setResults] = useState({
-		data: null,
-		isLoading: false,
-		errors: null,
-	});
-
-	async function refresh() {
-		setResults((r) => ({ ...r, isLoading: true }));
-		const [data, errors] = await query(args);
-		setResults((r) => ({ ...r, isLoading: false, data, errors }));
-	}
-
-	useEffect(() => {
-		if (results.isLoading) return;
-		refresh();
-	}, [args]);
-
-	return { ...results, refresh };
-}
-
-//get.activity.js
-async function getActivity({ id }) {
-	try {
-		const res = await fetch(`${url}/${id}`);
-		// e.g. more data transformation here, or grouping after multiple fetches
-		return [await res.json(), null];
-	} catch (e) {
-		return [null, e];
-	}
-}
-
-export function useGetActivity({ id }) {
-	return useQuery(getActivity, { id });
-}
-```
-
-Another example is the create command below. Again a generic wrapper is created that links an async function to React. The business logic is separated again to make it easily tested.
-
-```js
-// Generic useCommand hook
-function useCommand(command) {
-	const [isLoading, setLoading] = useState(false);
-
-	async function handler(...args) {
-		setLoading(true);
-		const [res, error] = await fn(...args);
-		setLoading(false);
-	}
-	return [handler, isLoading];
-}
-
-// create.activity.js
-async function createActivity(data) {
-	try {
-		const errors = validateActivity(data);
-		if (errors) return [null, errors];
-		const res = await fetch(...);
-		return [await res.json(), null];
-	} catch (e) {
-		return [null, e];
-	}
-}
-
-export function useCreateActivity() {
-	return useCommand(createActivity);
-}
-```
+- [Get action](../example/actions/get.activity.js)
+- [Create action](../example/actions/create.activity.js)

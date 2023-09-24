@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// Simple query hook for async calls that manages results into React state
 export function useQuery(query, args) {
   const [results, setResults] = useState({
     data: null,

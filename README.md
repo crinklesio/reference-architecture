@@ -74,8 +74,3 @@ Business logic that can be represented by [pure functions](https://www.geeksforg
 - Validations
 - Transformations (e.g. grouping of two types of objects, like joining two lists)
 - Formatting for visual representation (e.g. combining two columns)
-
-- **Components**: the visual components, sub-components etc. of the features. These can be used by routes, or other feature components. Often structured like dictated in [design systems](/guidelines/design-systems.md) but scoped to features.
-- **Actions**: commands, queries or state-management related. Complex state-management should be modeled like [state machines](https://statecharts.dev/) or a [[Proxy store|proxy store]] should be used.
-- **Models**: validation, transformation for logic/manipulation (e.g. group-on-X), formatting for visual representation (e.g. concatenate two attributes in a string).
-- **Pages**: directly corresponding to what is configured in the router.

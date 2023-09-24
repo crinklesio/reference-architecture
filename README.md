@@ -60,15 +60,18 @@ features/
 
 > See [this file](/details/feature-example.md) for an example
 
-**Components**
+### Components
+
 The visual components, sub-components etc. of the features. These can be used by routes, or other feature components. Often structured like dictated in [[CSS architecture|design systems]] but scoped to features. _Pages_ are special components. They directly corresponding to what is configured in the router.
 
-**Actions**
+### Actions
+
 Commands or queries that are responsible for the interaction with the _api_ (remote) and _store_ (local) and provide meaningful information back to the UI (e.g. error messages, the correctly formatted data). They utilise _models_ as much as possible, effectively operate like a _logic sandwich_ (e.g. fetch data via the api, use a model to transform it, write result in the store). In case of queries, _subscriptions_ are used to ensure continuous updates of data that can be passed onto the UI.
 
 Actions are written in pure JavaScript. This makes them easier _testable_. In many cases, framework-binders are used to enable framework features (e.g. use a custom React hook to bind an action to the reactive nature of React). Binders also allow to subscribe to changes
 
-**Models**
+### Models
+
 Business logic that can be represented by [pure functions](https://www.geeksforgeeks.org/pure-functions-in-javascript/). This means that they work like plain “input-output” functions. The same input always results in the same output, and they do _not have any side-effects on anything else_. They cannot write data to variables outside the function etc. Their pure nature ensures easy _testability_ of the implemented logic. Examples are:
 
 - Validations

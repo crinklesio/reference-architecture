@@ -1,6 +1,6 @@
 # Proxy store
 
-> See [state management](../guidelines/state-management.md) for generic information about state management, or [kevtiq/chifferobe](https://github.com/kevtiq/chifferobe) for an example implementation
+> See [state management](../guidelines/state-management.md) for generic information about state management, or [vyckes/chifferobe](https://github.com/vyckes/chifferobe) for an example implementation
 
 State can also live on a global or application level. The recommendation is that any store store that goes beyond single values or objects is _event-driven_ and _immutable_.
 

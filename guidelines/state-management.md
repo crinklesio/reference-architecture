@@ -1,6 +1,4 @@
-# State management
-
->  See also [proxy store](../details/store.md), or [this article](https://crinkles.io/writing/state-management), or [this website](https://statecharts.dev/)
+# Types of state
 
 In modern client-side applications, there are four different types of state that can be managed. The distinction of these different types is required, as each of these can be solved differently and in different areas of the clean architecture.
 

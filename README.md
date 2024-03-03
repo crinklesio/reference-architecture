@@ -1,30 +1,24 @@
 # SPA reference architecture
 
 ## 1. Design principles
-### 1.1. Separation of concerns & modularity
+### 1.1. Separation of concerns
 The activity of enforcing logical boundaries between each of the architectural concerns. It allows for _maintainable_ and _testable_ code. In a SPA, this roughly means that code is divided into various layers.
 
 - **Application layer**: global state management, authentication, session management, etc. 
 - **UI layer**: your global design system combined with the styles, i.e. (S)CSS, coming with that. 
-- **Domain layer**: everything related to business logic + business related UI (non-generic UI components). 
+- **Domain layer**: everything related to business logic + business related UI (non-generic UI components), confined into *modules* as little dependencies on other modules (as possible). 
 
-### 1.2. Modularity
-Business logic (incl. UI elements) is grouped in *modules* that have the least amount of dependencies on other modules. Each module consists of: 
-
-- **Business logic**: validation, transformation, authorization, etc.
-- **Domain specific UI**: components not part of the global design system, and specific for the domain. 
-
-### 1.3. Co-location
+### 1.2. Co-location
 Things, like functions, types, constants, data, etc. need to live close to where it is being used. This allows for a better developer experience, but above all, better maintainability of applications.  
 
-### 1.4. Optimize for change first
+### 1.3. Optimize for change first
 Creating hasty abstractions is a common pitfall, resulting in over-engineered solutions that are harder to maintain. The goal is to choose between “don’t repeat yourself (DRY)” and “write everything twice (WET)”, or even the [“rule-of-three”](https://blog.codinghorror.com/rule-of-three/), based on the chance of change for different parts of your code base. 
 
 - **Application layer**: things here will not change often, or not at all. That’s why a DRY approach works well. 
 - **UI layer**: the global design system will not change often (mostly appended upon). That’s why DRY approach works well. 
 - **Domain layer**: Things will change often, both on the business logic, as well as the UI. A WET approach is preferred here, or even apply the rule-of-three. 
 
-> NOTE: the running assumption is domain logic changes a lot. Avoid abstracting entire modules, or create dependencies between modules just for the sake of code-sharing. 
+*NOTE*: the running assumption is domain logic changes a lot. Avoid abstracting entire modules, or create dependencies between modules just for the sake of code-sharing. 
 
 ## 2. High-level project structure
 

@@ -58,9 +58,33 @@ modules/
 
 **Pages** are the main entry points for a router (e.g. from the `src/app/router.ts` file) to point to. **Components** are used by pages, or by other modules to show specific information (e.g. widget on the dashboard).
 
-## 4. Implementation guidelines
+## 4. Implementation guidelines/rules
 
-### 4.1. Type-safety
+### 4.1. Write actions in plain JavaScript/TypeScript
+
+Actions are not tied to a front-end framework themselves. By separating them, you achieve more testable and maintainable code. You can write wrappers to link actions to a framework (e.g. use a generic hook that provides loading state of asynchronous functions; use subscriptions for updates on remote state).
+
+### 4.2. Co-locate validation and transformation within the action
+
+By co-locating validation and transformations within the action (making them part of the action), tests for the actions become more complete, and realistic. It avoids writing code for validation and transformation that cover cases that are not realistic.
+
+### 4.3. Keep it simple, stupid
+
+It sounds obvious, but in reality it hard. Whenever you write (helper) functions/components, it is tempting to add additional checks for outliers (e.g. does a value exist or not). This is often theoretical. In practice, you only use these functions in limited ways, and these checks/balances are never hit. The only time when you hit them are in your tests, and not in your production setting. Only add additional complexity the moment you need it, or when you are absolutely sure you are going to need it in the (near) future.
+
+### 4.4. One exported function per file
+
+Most JavaScript/TypeScript code written on the front-end comes in the form of functions. Ensure only _one function gets exported_ per file. This holds true for plain JavaScript/TypeScript, but also for the UI components written in any other format. Splitting code into separate functions increases the readability and maintainability of the code. In this line of thinking, you could choose to give each function its own file. However, this conflicts with two principles of this architecture: "co-location" and "optimize for change". If a function is only used by one or two other functions, you can argue the function itself should not even be a separate function, and it is OK if it would live twice. In addition, "co-location" describes that it should live close to where it is used, which often does not happen when splitting code. So the general rule is:
+
+"_Only export one function per file, but have all the helper functions in the same file, locally available_"
+
+There are several advantages for your developer experience when doing so:
+
+- It makes naming things easier. You don't have to worry your helper function uses the same name as some other helper function.
+- It reduces the overhead on your IDE's auto-complete feature, and makes functions that actually want to be able to use in other files easier to find and navigate.
+- It reduces complexity of your code, that can be "measured" by testing. By only writing tests in a case that cover 100% of your main exported function, you can easily spot the areas of your helper function that will never get triggered. You can remove these paths, which is in line with the KISS guideline.
+
+### 4.5. Type-safety
 
 It is recommended to use TypeScript to enable type-safety across the team. Standardising domain-related types can greatly help in achieving _maintenance_.
 
@@ -69,20 +93,6 @@ It is recommended to use TypeScript to enable type-safety across the team. Stand
 - `I<ObjectName>`:client-side type that has a temporary properties, limited properties and more optional properties compared to the server type. Often used for “create” forms.
 
 For example, in case of a `projects` module, you will get `IProject`, `Project`, and `ProjectExtended`.
-
-### 4.2. Write actions in plain JavaScript/TypeScript
-
-Actions are not tied to a front-end framework themselves. By separating them, you achieve more testable and maintainable code. You can write wrappers to link actions to a framework (e.g. use a generic hook that provides loading state of asynchronous functions; use subscriptions for updates on remote state).
-
-### 4.3. Co-locate validation and transformation within the action
-
-By co-locating validation and transformations within the action (making them part of the action), tests for the actions become more complete, and realistic. It avoids writing code for validation and transformation that cover cases that are not realistic.
-
-### 4.4. One function per file ... kinda
-
-Ensure only one function gets _exported_ per file. This holds true for plain JavaScript/TypeScript, but also for the UI components written in any other format. By only allowing one export, you get forced to limit the overhead on IDE’s auto-complete feature, and make code navigation easier.
-
-You can put more functions into a file for readability/maintainability purposes. These functions are only used by the exported function of the file.
 
 ## 5. More information
 

@@ -68,9 +68,9 @@ Actions are not tied to a front-end framework themselves. By separating them, yo
 
 By co-locating validation and transformations within the action (making them part of the action), tests for the actions become more complete, and realistic. It avoids writing code for validation and transformation that cover cases that are not realistic.
 
-### 4.3. Keep it simple, stupid
+### 4.3. YAGNI & KISS
 
-It sounds obvious, but in reality it hard. Whenever you write (helper) functions/components, it is tempting to add additional checks for outliers (e.g. does a value exist or not). This is often theoretical. In practice, you only use these functions in limited ways, and these checks/balances are never hit. The only time when you hit them are in your tests, and not in your production setting. Only add additional complexity the moment you need it, or when you are absolutely sure you are going to need it in the (near) future.
+It sounds obvious, but in reality it hard. Whenever you write (helper) functions/components, it is tempting to add additional checks for outliers (e.g. does a value exist or not). This is often theoretical. In practice, you only use these functions in limited ways, and these checks/balances are never hit. The only time when you hit them are in your tests, and not in your production setting. "You ain't gonna need it (YAGNI)" dictates that you only add what you currently need, nothing more, nothing less. When you do so, keep it simple, stupid (KISS). 
 
 ### 4.4. One exported function per file
 
